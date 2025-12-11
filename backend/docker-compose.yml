@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: audiencelab-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - WORKERS=4
+      - ENVIRONMENT=production
+    env_file:
+      - .env
+    volumes:
+      # Persist generated files
+      - ./generated_audio:/app/generated_audio
+      - ./generated_videos:/app/generated_videos
+      # Allow env updates without rebuild
+      - ./.env:/app/.env:ro
+    networks:
+      - audiencelab-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+networks:
+  audiencelab-network:
+    driver: bridge

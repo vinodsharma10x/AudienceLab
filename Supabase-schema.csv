@@ -1,0 +1,286 @@
+table_schema,table_name,column_name,data_type,is_nullable,column_default,character_maximum_length,ordinal_position
+public,assistant_calls,id,uuid,NO,gen_random_uuid(),null,1
+public,assistant_calls,session_id,uuid,YES,null,null,2
+public,assistant_calls,step_id,uuid,YES,null,null,3
+public,assistant_calls,assistant_type,character varying,NO,null,50,4
+public,assistant_calls,assistant_model,character varying,YES,null,100,5
+public,assistant_calls,call_type,character varying,NO,null,50,6
+public,assistant_calls,input_data,jsonb,NO,null,null,7
+public,assistant_calls,output_data,jsonb,YES,null,null,8
+public,assistant_calls,prompt_text,text,YES,null,null,9
+public,assistant_calls,response_text,text,YES,null,null,10
+public,assistant_calls,tokens_used,integer,YES,null,null,11
+public,assistant_calls,cost_cents,integer,YES,null,null,12
+public,assistant_calls,duration_ms,integer,YES,null,null,13
+public,assistant_calls,status,character varying,YES,'pending'::character varying,50,14
+public,assistant_calls,error_message,text,YES,null,null,15
+public,assistant_calls,created_at,timestamp with time zone,YES,now(),null,16
+public,elevenlabs_voices,voice_id,character varying,NO,null,255,1
+public,elevenlabs_voices,name,character varying,NO,null,255,2
+public,elevenlabs_voices,description,text,YES,null,null,3
+public,elevenlabs_voices,category,character varying,YES,null,100,4
+public,elevenlabs_voices,labels,jsonb,YES,'[]'::jsonb,null,5
+public,elevenlabs_voices,preview_url,text,YES,null,null,6
+public,elevenlabs_voices,preview_audio_data,bytea,YES,null,null,7
+public,elevenlabs_voices,gender,character varying,YES,null,20,8
+public,elevenlabs_voices,age,character varying,YES,null,50,9
+public,elevenlabs_voices,accent,character varying,YES,null,100,10
+public,elevenlabs_voices,use_case,character varying,YES,null,100,11
+public,elevenlabs_voices,is_active,boolean,YES,TRUE,null,12
+public,elevenlabs_voices,created_at,timestamp with time zone,YES,now(),null,13
+public,elevenlabs_voices,updated_at,timestamp with time zone,YES,now(),null,14
+public,facebook_accounts,id,uuid,NO,gen_random_uuid(),null,1
+public,facebook_accounts,user_id,uuid,NO,null,null,2
+public,facebook_accounts,facebook_user_id,character varying,NO,null,50,3
+public,facebook_accounts,facebook_user_name,character varying,NO,null,255,4
+public,facebook_accounts,access_token,text,NO,null,null,5
+public,facebook_accounts,token_expires_at,timestamp with time zone,YES,null,null,6
+public,facebook_accounts,account_name,character varying,YES,null,255,7
+public,facebook_accounts,status,character varying,YES,'active'::character varying,20,8
+public,facebook_accounts,sync_frequency,character varying,YES,'every_4_hours'::character varying,20,9
+public,facebook_accounts,sync_enabled,boolean,YES,TRUE,null,10
+public,facebook_accounts,selected_ad_accounts,jsonb,YES,'[]'::jsonb,null,11
+public,facebook_accounts,last_sync,timestamp with time zone,YES,null,null,12
+public,facebook_accounts,last_error,text,YES,null,null,13
+public,facebook_accounts,created_at,timestamp with time zone,YES,now(),null,14
+public,facebook_accounts,updated_at,timestamp with time zone,YES,now(),null,15
+public,facebook_ad_accounts,id,uuid,NO,gen_random_uuid(),null,1
+public,facebook_ad_accounts,facebook_account_id,uuid,NO,null,null,2
+public,facebook_ad_accounts,ad_account_id,character varying,NO,null,50,3
+public,facebook_ad_accounts,account_name,character varying,NO,null,255,4
+public,facebook_ad_accounts,currency,character varying,NO,null,10,5
+public,facebook_ad_accounts,timezone_name,character varying,NO,null,100,6
+public,facebook_ad_accounts,account_status,integer,YES,1,null,7
+public,facebook_ad_accounts,is_selected,boolean,YES,FALSE,null,8
+public,facebook_ad_accounts,created_at,timestamp with time zone,YES,now(),null,9
+public,facebook_ad_accounts,updated_at,timestamp with time zone,YES,now(),null,10
+public,facebook_ad_performance,id,uuid,NO,gen_random_uuid(),null,1
+public,facebook_ad_performance,facebook_account_id,uuid,NO,null,null,2
+public,facebook_ad_performance,ad_account_id,character varying,NO,null,50,3
+public,facebook_ad_performance,campaign_id,character varying,YES,null,50,4
+public,facebook_ad_performance,campaign_name,character varying,YES,null,255,5
+public,facebook_ad_performance,adset_id,character varying,YES,null,50,6
+public,facebook_ad_performance,adset_name,character varying,YES,null,255,7
+public,facebook_ad_performance,ad_id,character varying,YES,null,50,8
+public,facebook_ad_performance,ad_name,character varying,YES,null,255,9
+public,facebook_ad_performance,date_start,date,NO,null,null,10
+public,facebook_ad_performance,date_stop,date,NO,null,null,11
+public,facebook_ad_performance,delivery_info,jsonb,YES,null,null,12
+public,facebook_ad_performance,spend,numeric,YES,null,null,13
+public,facebook_ad_performance,impressions,integer,YES,null,null,14
+public,facebook_ad_performance,reach,integer,YES,null,null,15
+public,facebook_ad_performance,frequency,numeric,YES,null,null,16
+public,facebook_ad_performance,cpm,numeric,YES,null,null,17
+public,facebook_ad_performance,cpc,numeric,YES,null,null,18
+public,facebook_ad_performance,ctr,numeric,YES,null,null,19
+public,facebook_ad_performance,clicks,integer,YES,null,null,20
+public,facebook_ad_performance,outbound_clicks_unique,integer,YES,null,null,21
+public,facebook_ad_performance,outbound_clicks_cpc_unique,numeric,YES,null,null,22
+public,facebook_ad_performance,outbound_clicks_ctr_unique,numeric,YES,null,null,23
+public,facebook_ad_performance,video_3s_views,integer,YES,null,null,24
+public,facebook_ad_performance,video_p50_watched_actions,integer,YES,null,null,25
+public,facebook_ad_performance,video_p95_watched_actions,integer,YES,null,null,26
+public,facebook_ad_performance,leads,integer,YES,null,null,27
+public,facebook_ad_performance,landing_page_views,integer,YES,null,null,28
+public,facebook_ad_performance,cost_per_landing_page_view,numeric,YES,null,null,29
+public,facebook_ad_performance,cost_per_lead,numeric,YES,null,null,30
+public,facebook_ad_performance,scheduled_actions,integer,YES,null,null,31
+public,facebook_ad_performance,cost_per_scheduled_action,numeric,YES,null,null,32
+public,facebook_ad_performance,purchases,integer,YES,null,null,33
+public,facebook_ad_performance,purchase_value,numeric,YES,null,null,34
+public,facebook_ad_performance,raw_data,jsonb,YES,null,null,35
+public,facebook_ad_performance,sync_timestamp,timestamp with time zone,YES,now(),null,36
+public,facebook_ad_performance,created_at,timestamp with time zone,YES,now(),null,37
+public,facebook_performance_summary,id,uuid,YES,null,null,1
+public,facebook_performance_summary,facebook_account_id,uuid,YES,null,null,2
+public,facebook_performance_summary,ad_account_id,character varying,YES,null,50,3
+public,facebook_performance_summary,campaign_id,character varying,YES,null,50,4
+public,facebook_performance_summary,campaign_name,character varying,YES,null,255,5
+public,facebook_performance_summary,adset_id,character varying,YES,null,50,6
+public,facebook_performance_summary,adset_name,character varying,YES,null,255,7
+public,facebook_performance_summary,ad_id,character varying,YES,null,50,8
+public,facebook_performance_summary,ad_name,character varying,YES,null,255,9
+public,facebook_performance_summary,date_start,date,YES,null,null,10
+public,facebook_performance_summary,date_stop,date,YES,null,null,11
+public,facebook_performance_summary,delivery_info,jsonb,YES,null,null,12
+public,facebook_performance_summary,spend,numeric,YES,null,null,13
+public,facebook_performance_summary,impressions,integer,YES,null,null,14
+public,facebook_performance_summary,reach,integer,YES,null,null,15
+public,facebook_performance_summary,frequency,numeric,YES,null,null,16
+public,facebook_performance_summary,cpm,numeric,YES,null,null,17
+public,facebook_performance_summary,cpc,numeric,YES,null,null,18
+public,facebook_performance_summary,ctr,numeric,YES,null,null,19
+public,facebook_performance_summary,clicks,integer,YES,null,null,20
+public,facebook_performance_summary,outbound_clicks_unique,integer,YES,null,null,21
+public,facebook_performance_summary,outbound_clicks_cpc_unique,numeric,YES,null,null,22
+public,facebook_performance_summary,outbound_clicks_ctr_unique,numeric,YES,null,null,23
+public,facebook_performance_summary,video_3s_views,integer,YES,null,null,24
+public,facebook_performance_summary,video_p50_watched_actions,integer,YES,null,null,25
+public,facebook_performance_summary,video_p95_watched_actions,integer,YES,null,null,26
+public,facebook_performance_summary,leads,integer,YES,null,null,27
+public,facebook_performance_summary,landing_page_views,integer,YES,null,null,28
+public,facebook_performance_summary,cost_per_landing_page_view,numeric,YES,null,null,29
+public,facebook_performance_summary,cost_per_lead,numeric,YES,null,null,30
+public,facebook_performance_summary,scheduled_actions,integer,YES,null,null,31
+public,facebook_performance_summary,cost_per_scheduled_action,numeric,YES,null,null,32
+public,facebook_performance_summary,purchases,integer,YES,null,null,33
+public,facebook_performance_summary,purchase_value,numeric,YES,null,null,34
+public,facebook_performance_summary,raw_data,jsonb,YES,null,null,35
+public,facebook_performance_summary,sync_timestamp,timestamp with time zone,YES,null,null,36
+public,facebook_performance_summary,created_at,timestamp with time zone,YES,null,null,37
+public,facebook_performance_summary,user_id,uuid,YES,null,null,38
+public,facebook_performance_summary,facebook_user_name,character varying,YES,null,255,39
+public,facebook_performance_summary,facebook_account_name,character varying,YES,null,255,40
+public,facebook_performance_summary,ad_account_name,character varying,YES,null,255,41
+public,facebook_performance_summary,currency,character varying,YES,null,10,42
+public,facebook_performance_summary,timezone_name,character varying,YES,null,100,43
+public,generated_assets,id,uuid,NO,gen_random_uuid(),null,1
+public,generated_assets,session_id,uuid,YES,null,null,2
+public,generated_assets,step_id,uuid,YES,null,null,3
+public,generated_assets,assistant_call_id,uuid,YES,null,null,4
+public,generated_assets,asset_type,character varying,NO,null,50,5
+public,generated_assets,asset_subtype,character varying,YES,null,50,6
+public,generated_assets,file_path,character varying,YES,null,500,7
+public,generated_assets,file_url,character varying,YES,null,500,8
+public,generated_assets,file_size_bytes,integer,YES,null,null,9
+public,generated_assets,mime_type,character varying,YES,null,100,10
+public,generated_assets,filename,character varying,YES,null,255,11
+public,generated_assets,duration_seconds,numeric,YES,null,null,12
+public,generated_assets,content_text,text,YES,null,null,13
+public,generated_assets,content_hash,character varying,YES,null,64,14
+public,generated_assets,metadata,jsonb,YES,'{}'::jsonb,null,15
+public,generated_assets,is_final,boolean,YES,FALSE,null,16
+public,generated_assets,created_at,timestamp with time zone,YES,now(),null,17
+public,session_forks,id,uuid,NO,gen_random_uuid(),null,1
+public,session_forks,parent_session_id,uuid,YES,null,null,2
+public,session_forks,child_session_id,uuid,YES,null,null,3
+public,session_forks,fork_from_step,integer,NO,null,null,4
+public,session_forks,fork_reason,character varying,YES,null,255,5
+public,session_forks,created_at,timestamp with time zone,YES,now(),null,6
+public,session_summary,id,uuid,YES,null,null,1
+public,session_summary,user_id,uuid,YES,null,null,2
+public,session_summary,name,character varying,YES,null,255,3
+public,session_summary,status,character varying,YES,null,50,4
+public,session_summary,current_step,integer,YES,null,null,5
+public,session_summary,total_steps,integer,YES,null,null,6
+public,session_summary,created_at,timestamp with time zone,YES,null,null,7
+public,session_summary,updated_at,timestamp with time zone,YES,null,null,8
+public,session_summary,completed_at,timestamp with time zone,YES,null,null,9
+public,session_summary,completed_steps,bigint,YES,null,null,10
+public,session_summary,total_assistant_calls,bigint,YES,null,null,11
+public,session_summary,total_assets,bigint,YES,null,null,12
+public,session_summary,total_cost_cents,bigint,YES,null,null,13
+public,sessions,id,uuid,NO,gen_random_uuid(),null,1
+public,sessions,user_id,uuid,YES,null,null,2
+public,sessions,name,character varying,YES,'Untitled Session'::character varying,255,3
+public,sessions,status,character varying,YES,'active'::character varying,50,4
+public,sessions,current_step,integer,YES,1,null,5
+public,sessions,total_steps,integer,YES,6,null,6
+public,sessions,product_idea,text,YES,null,null,7
+public,sessions,target_audience,text,YES,null,null,8
+public,sessions,created_at,timestamp with time zone,YES,now(),null,9
+public,sessions,updated_at,timestamp with time zone,YES,now(),null,10
+public,sessions,completed_at,timestamp with time zone,YES,null,null,11
+public,sessions,metadata,jsonb,YES,'{}'::jsonb,null,12
+public,simple_logs,id,uuid,NO,gen_random_uuid(),null,1
+public,simple_logs,event_name,character varying,NO,null,255,2
+public,simple_logs,event_value,text,YES,null,null,3
+public,simple_logs,user_id,uuid,YES,null,null,4
+public,simple_logs,session_id,uuid,YES,null,null,5
+public,simple_logs,thread_id,character varying,YES,null,255,6
+public,simple_logs,metadata,jsonb,YES,'{}'::jsonb,null,7
+public,simple_logs,created_at,timestamp with time zone,YES,now(),null,8
+public,steps,id,uuid,NO,gen_random_uuid(),null,1
+public,steps,session_id,uuid,YES,null,null,2
+public,steps,step_number,integer,NO,null,null,3
+public,steps,step_name,character varying,NO,null,100,4
+public,steps,status,character varying,YES,'pending'::character varying,50,5
+public,steps,started_at,timestamp with time zone,YES,null,null,6
+public,steps,completed_at,timestamp with time zone,YES,null,null,7
+public,steps,duration_seconds,integer,YES,null,null,8
+public,steps,assistant_calls_count,integer,YES,0,null,9
+public,steps,assets_count,integer,YES,0,null,10
+public,steps,created_at,timestamp with time zone,YES,now(),null,11
+public,steps,updated_at,timestamp with time zone,YES,now(),null,12
+public,sync_job_status,id,uuid,NO,gen_random_uuid(),null,1
+public,sync_job_status,facebook_account_id,uuid,NO,null,null,2
+public,sync_job_status,job_type,character varying,YES,'ad_performance_sync'::character varying,50,3
+public,sync_job_status,status,character varying,NO,null,20,4
+public,sync_job_status,started_at,timestamp with time zone,YES,null,null,5
+public,sync_job_status,completed_at,timestamp with time zone,YES,null,null,6
+public,sync_job_status,records_processed,integer,YES,0,null,7
+public,sync_job_status,error_message,text,YES,null,null,8
+public,sync_job_status,created_at,timestamp with time zone,YES,now(),null,9
+public,user_selections,id,uuid,NO,gen_random_uuid(),null,1
+public,user_selections,session_id,uuid,YES,null,null,2
+public,user_selections,step_id,uuid,YES,null,null,3
+public,user_selections,selection_type,character varying,NO,null,100,4
+public,user_selections,selection_data,jsonb,NO,null,null,5
+public,user_selections,options_presented,jsonb,YES,null,null,6
+public,user_selections,selection_index,integer,YES,null,null,7
+public,user_selections,custom_input,text,YES,null,null,8
+public,user_selections,created_at,timestamp with time zone,YES,now(),null,9
+public,video_ads_v2_campaigns,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_campaigns,user_id,uuid,NO,null,null,2
+public,video_ads_v2_campaigns,conversation_id,character varying,NO,null,255,3
+public,video_ads_v2_campaigns,parent_campaign_id,uuid,YES,null,null,4
+public,video_ads_v2_campaigns,campaign_name,character varying,YES,null,255,5
+public,video_ads_v2_campaigns,current_step,integer,YES,1,null,6
+public,video_ads_v2_campaigns,status,character varying,YES,'draft'::character varying,50,7
+public,video_ads_v2_campaigns,created_at,timestamp with time zone,YES,now(),null,8
+public,video_ads_v2_campaigns,updated_at,timestamp with time zone,YES,now(),null,9
+public,video_ads_v2_hooks,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_hooks,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_hooks,hooks_data,jsonb,NO,null,null,3
+public,video_ads_v2_hooks,selected_hooks,jsonb,YES,null,null,4
+public,video_ads_v2_hooks,processing_time_ms,integer,YES,null,null,5
+public,video_ads_v2_hooks,created_at,timestamp with time zone,YES,now(),null,6
+public,video_ads_v2_hooks,updated_at,timestamp with time zone,YES,now(),null,7
+public,video_ads_v2_marketing_analysis,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_marketing_analysis,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_marketing_analysis,avatar_analysis,jsonb,YES,null,null,3
+public,video_ads_v2_marketing_analysis,journey_mapping,jsonb,YES,null,null,4
+public,video_ads_v2_marketing_analysis,objections_analysis,jsonb,YES,null,null,5
+public,video_ads_v2_marketing_analysis,angles_generation,jsonb,YES,null,null,6
+public,video_ads_v2_marketing_analysis,selected_angles,jsonb,YES,null,null,7
+public,video_ads_v2_marketing_analysis,processing_time_ms,integer,YES,null,null,8
+public,video_ads_v2_marketing_analysis,claude_model,character varying,YES,null,100,9
+public,video_ads_v2_marketing_analysis,created_at,timestamp with time zone,YES,now(),null,10
+public,video_ads_v2_marketing_analysis,updated_at,timestamp with time zone,YES,now(),null,11
+public,video_ads_v2_media,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_media,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_media,media_type,character varying,NO,null,50,3
+public,video_ads_v2_media,script_id,character varying,YES,null,255,4
+public,video_ads_v2_media,file_url,text,NO,null,null,5
+public,video_ads_v2_media,file_metadata,jsonb,YES,null,null,6
+public,video_ads_v2_media,processing_time_ms,integer,YES,null,null,7
+public,video_ads_v2_media,created_at,timestamp with time zone,YES,now(),null,8
+public,video_ads_v2_product_info,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_product_info,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_product_info,url,text,YES,null,null,3
+public,video_ads_v2_product_info,product_data,jsonb,NO,null,null,4
+public,video_ads_v2_product_info,source,character varying,YES,null,50,5
+public,video_ads_v2_product_info,created_at,timestamp with time zone,YES,now(),null,6
+public,video_ads_v2_product_info,updated_at,timestamp with time zone,YES,now(),null,7
+public,video_ads_v2_scripts,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_scripts,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_scripts,scripts_data,jsonb,NO,null,null,3
+public,video_ads_v2_scripts,selected_scripts,jsonb,YES,null,null,4
+public,video_ads_v2_scripts,processing_time_ms,integer,YES,null,null,5
+public,video_ads_v2_scripts,created_at,timestamp with time zone,YES,now(),null,6
+public,video_ads_v2_scripts,updated_at,timestamp with time zone,YES,now(),null,7
+public,video_ads_v2_selections,id,uuid,NO,gen_random_uuid(),null,1
+public,video_ads_v2_selections,campaign_id,uuid,NO,null,null,2
+public,video_ads_v2_selections,voice_data,jsonb,YES,null,null,3
+public,video_ads_v2_selections,actor_data,jsonb,YES,null,null,4
+public,video_ads_v2_selections,created_at,timestamp with time zone,YES,now(),null,5
+public,video_ads_v2_selections,updated_at,timestamp with time zone,YES,now(),null,6
+public,workflow_contexts,id,uuid,NO,null,null,1
+public,workflow_contexts,user_id,uuid,NO,null,null,2
+public,workflow_contexts,workflow_type,character varying,NO,null,50,3
+public,workflow_contexts,current_step,character varying,NO,null,50,4
+public,workflow_contexts,step_data,jsonb,NO,null,null,5
+public,workflow_contexts,full_context,jsonb,NO,null,null,6
+public,workflow_contexts,context_summary,text,YES,null,null,7
+public,workflow_contexts,created_at,timestamp without time zone,YES,now(),null,8
+public,workflow_contexts,updated_at,timestamp without time zone,YES,now(),null,9

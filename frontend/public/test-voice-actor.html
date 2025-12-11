@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Voice Actor Page - Sucana v4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        .button {
+            background: #1976d2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            display: inline-block;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .button:hover {
+            background: #1565c0;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice Actor Page Test</h1>
+        
+        <p>Click the button below to test the updated Voice Actor page design with sample data.</p>
+        
+        <button class="button" onclick="testVoiceActorPage()">
+            🎯 Test Voice Actor Page
+        </button>
+        
+        <p style="margin-top: 30px; font-size: 14px;">
+            This will set up test data and navigate to the voice-actor page where you can see the new design matching the provided images.
+        </p>
+    </div>
+
+    <script>
+        function testVoiceActorPage() {
+            // Test data for voice-actor page
+            const testScriptData = {
+                "campaign_scripts": {
+                    "selected_angle": {
+                        "id": "angle_1",
+                        "angle": 1,
+                        "category": "Problem Solution",
+                        "concept": "While others offer theoretical courses, our approach bridges practical business strategy with AI",
+                        "type": "positive"
+                    },
+                    "scripts": [
+                        {
+                            "script_id": "script-1",
+                            "hook": "Ready for real income without leaving your job?",
+                            "body": "Look, I thought it was impossible too until I discovered how to combine AI with real business strategy. While others sell you courses full of theory you'll never apply, we teach you the exact method that's already generating extra income for professionals like you.",
+                            "selected": true
+                        },
+                        {
+                            "script_id": "script-2", 
+                            "hook": "While others teach theory, we teach success.",
+                            "body": "Do you know what's the difference between a course that works and one that doesn't? Real results. We don't fill your head with technical concepts you'll never use. We show you exactly how to generate your first AI sale in the next few weeks.",
+                            "selected": true
+                        }
+                    ]
+                }
+            };
+
+            // Store test data for the voice-actor page
+            localStorage.setItem('videoAdsTestData', JSON.stringify(testScriptData));
+            
+            // Navigate to voice-actor page
+            window.location.href = '/video-ads/voice-actor';
+        }
+    </script>
+</body>
+</html>

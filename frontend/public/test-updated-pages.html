@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Updated Voice Actor & Audio Pages - Sucana v4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        .button {
+            background: #1976d2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            display: inline-block;
+            text-decoration: none;
+            transition: background 0.2s;
+            width: 90%;
+        }
+        .button:hover {
+            background: #1565c0;
+        }
+        .button.secondary {
+            background: #388e3c;
+        }
+        .button.secondary:hover {
+            background: #2e7d32;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .feature-list {
+            text-align: left;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .feature-list h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .feature-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .feature-list li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭🎵 Updated Voice Actor & Audio Pages</h1>
+        
+        <p>Test the newly updated designs with enhanced layouts and improved user experience!</p>
+        
+        <div class="feature-list">
+            <h3>🎭 Voice Actor Page Updates:</h3>
+            <ul>
+                <li>✅ Voice descriptions show only first sentence</li>
+                <li>✅ Actor images now fill entire card with text overlay</li>
+                <li>✅ Transparent gradient background for text readability</li>
+                <li>✅ Increased image height (220px) for better visual impact</li>
+                <li>✅ 4-column responsive grid layout</li>
+            </ul>
+        </div>
+
+        <div class="feature-list">
+            <h3>🎵 Audio Page Updates:</h3>
+            <ul>
+                <li>✅ 4-column grid layout similar to actor images</li>
+                <li>✅ Compact audio cards with preview text</li>
+                <li>✅ Removed full descriptions for better space usage</li>
+                <li>✅ Separate cards for hooks and scripts</li>
+                <li>✅ Enhanced play buttons with hover effects</li>
+            </ul>
+        </div>
+        
+        <button class="button" onclick="testVoiceActorPage()">
+            🎭 Test Voice Actor Page
+        </button>
+        
+        <button class="button secondary" onclick="testAudioPage()">
+            🎵 Test Audio Page (Full Flow)
+        </button>
+        
+        <p style="margin-top: 30px; font-size: 14px;">
+            Both pages now feature improved layouts with better visual hierarchy and space utilization.
+        </p>
+    </div>
+
+    <script>
+        function testVoiceActorPage() {
+            // Test data for voice-actor page
+            const testScriptData = {
+                "campaign_scripts": {
+                    "selected_angle": {
+                        "id": "angle_1",
+                        "angle": 1,
+                        "category": "Problem Solution",
+                        "concept": "While others offer theoretical courses, our approach bridges practical business strategy with AI",
+                        "type": "positive"
+                    },
+                    "scripts": [
+                        {
+                            "script_id": "script-1",
+                            "hook": "Ready for real income without leaving your job?",
+                            "body": "Look, I thought it was impossible too until I discovered how to combine AI with real business strategy. While others sell you courses full of theory you'll never apply, we teach you the exact method that's already generating extra income for professionals like you.",
+                            "selected": true
+                        },
+                        {
+                            "script_id": "script-2", 
+                            "hook": "While others teach theory, we teach success.",
+                            "body": "Do you know what's the difference between a course that works and one that doesn't? Real results. We don't fill your head with technical concepts you'll never use. We show you exactly how to generate your first AI sale in the next few weeks.",
+                            "selected": true
+                        }
+                    ]
+                }
+            };
+
+            // Store test data for the voice-actor page
+            localStorage.setItem('videoAdsTestData', JSON.stringify(testScriptData));
+            
+            // Navigate to voice-actor page
+            window.location.href = '/video-ads/voice-actor';
+        }
+
+        function testAudioPage() {
+            // Set up full flow test data
+            const testData = {
+                threadId: 'test-thread-' + Date.now(),
+                campaignScripts: {
+                    selected_angle: {
+                        id: 'angle-1',
+                        angle: 1,
+                        category: 'Problem Solution',
+                        concept: 'Identifies a common problem and presents the product as the solution',
+                        type: 'positive'
+                    },
+                    scripts: [
+                        {
+                            script_id: 'script-1',
+                            hook: 'Are you tired of struggling with complex project management tools?',
+                            body: 'Introducing TaskFlow - the intuitive project management solution that gets your team organized in minutes, not hours.',
+                            selected: true
+                        },
+                        {
+                            script_id: 'script-2', 
+                            hook: 'Stop wasting hours on project management overhead!',
+                            body: 'TaskFlow eliminates the complexity with smart automation that handles the busy work for you.',
+                            selected: true
+                        }
+                    ]
+                },
+                selectedVoice: {
+                    voice_id: 'EXAVITQu4vr4xnSDxMaL',
+                    name: 'Bella',
+                    description: 'A young American woman with a clear, confident voice. Perfect for professional presentations.',
+                    category: 'conversational',
+                    labels: ['american', 'female', 'young'],
+                    gender: 'female',
+                    age: 'young adult',
+                    accent: 'american',
+                    use_case: 'conversational'
+                },
+                selectedActor: {
+                    filename: 'actor-01.jpg',
+                    name: 'Sarah Johnson',
+                    description: 'Professional young woman in business attire',
+                    category: 'business'
+                }
+            };
+
+            // Store test data in localStorage for Audio page
+            localStorage.setItem('videoAdsState', JSON.stringify({
+                step: 'audio',
+                data: testData
+            }));
+
+            // Navigate to audio page
+            window.location.href = '/video-ads/audio';
+        }
+    </script>
+</body>
+</html>

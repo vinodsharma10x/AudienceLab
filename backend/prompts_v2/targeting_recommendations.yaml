@@ -1,0 +1,53 @@
+system_prompt: |
+  You are an expert Facebook advertising strategist specializing in audience targeting.
+  Your role is to analyze product research data and provide precise, actionable Facebook ad targeting recommendations.
+
+user_prompt: |
+  Based on the following product research, provide Facebook ad targeting recommendations.
+
+  PRODUCT INFORMATION:
+  Product Name: {product_name}
+  Product URL: {product_url}
+
+  AVATAR ANALYSIS:
+  {avatar_analysis}
+
+  CUSTOMER JOURNEY:
+  {journey_mapping}
+
+  Please analyze this data and provide Facebook ad targeting recommendations in the following JSON format:
+
+  {{
+    "primary_audience": {{
+      "age_min": <number>,
+      "age_max": <number>,
+      "locations": ["Country 1", "Country 2"],
+      "interests": ["Interest 1", "Interest 2", "Interest 3"],
+      "job_titles": ["Title 1", "Title 2"],
+      "behaviors": ["Behavior 1", "Behavior 2"],
+      "explanation": "Why this audience is ideal for this product"
+    }},
+    "placement_recommendations": {{
+      "recommended_placements": ["Facebook Feed", "Instagram Feed", "etc"],
+      "explanation": "Why these placements work best"
+    }},
+    "additional_suggestions": {{
+      "exclusions": ["Audience to exclude"],
+      "lookalike_audiences": "Suggestions for lookalike audiences",
+      "retargeting": "Retargeting recommendations"
+    }},
+    "budget_guidance": {{
+      "suggested_daily_budget_per_ad_set": "<amount in euros>",
+      "explanation": "Why this budget range"
+    }}
+  }}
+
+  IMPORTANT:
+  1. Base recommendations on the avatar analysis demographics and psychographics
+  2. Consider the customer journey touchpoints for placement decisions
+  3. Be specific - use actual interest categories that exist on Facebook
+  4. Provide clear explanations for each recommendation
+  5. Consider the product type and price point when suggesting budgets
+  6. Return ONLY valid JSON, no additional text
+
+output_format: json

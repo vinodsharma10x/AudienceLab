@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Audio Data Transformation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { padding: 10px 20px; margin: 10px 5px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #1976D2; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Audio Data Transformation Fix</h1>
+        
+        <div class="section">
+            <h2>Data Flow Test</h2>
+            <button onclick="testDataTransformation()">Test Data Transformation</button>
+            <button onclick="testRealAudioCall()">Test Real Audio API Call</button>
+        </div>
+        
+        <div class="section">
+            <h3>Original Data (from Scripts page)</h3>
+            <pre id="originalData"></pre>
+        </div>
+        
+        <div class="section">
+            <h3>Transformed Data (for backend)</h3>
+            <pre id="transformedData"></pre>
+        </div>
+        
+        <div class="section">
+            <h3>API Response</h3>
+            <pre id="apiResponse"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Mock data that Scripts.tsx would send to VoiceActor.tsx
+        const mockVoiceActorData = {
+            threadId: 'test-thread-123',
+            campaignScripts: {
+                campaign_scripts: {
+                    angles: [
+                        {
+                            selected_angle: {
+                                id: 'angle_1',
+                                angle: 1,
+                                category: 'Problem-Solution Focus',
+                                concept: 'Highlight customer pain points and offer solution',
+                                type: 'positive'
+                            },
+                            hooks: [
+                                {
+                                    selected_hook: {
+                                        id: 'hook_1_1',
+                                        hook_text: 'Are you tired of struggling with inefficient business processes?',
+                                        hook_type: 'direct_question'
+                                    },
+                                    scripts: [
+                                        {
+                                            id: 'script_1_1_1',
+                                            version: 'A',
+                                            content: 'Are you tired of struggling with inefficient business processes? You are not alone. Many business owners face the same challenge every single day. But what if I told you there is a solution that can transform your operations overnight? Our revolutionary platform streamlines your workflow, saves you time, and boosts your bottom line. Do not let another day pass watching your competition get ahead. Click the link below and discover how our solution can change your business forever.',
+                                            cta: 'Click here to transform your business',
+                                            target_emotion: 'Urgency and hope'
+                                        },
+                                        {
+                                            id: 'script_1_1_2',
+                                            version: 'B',
+                                            content: 'Stop wasting time on manual processes that drain your energy and resources. Our intelligent automation platform handles the heavy lifting while you focus on growing your business. Thousands of entrepreneurs have already made the switch. Join them today and see immediate results.',
+                                            cta: 'Start your transformation now',
+                                            target_emotion: 'Motivation and urgency'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            selectedVoice: {
+                voice_id: 'mock_voice_001',
+                name: 'Sarah - Professional',
+                description: 'Professional female voice, perfect for business content'
+            },
+            selectedActor: {
+                name: 'Business Executive',
+                image: 'business-exec-1.jpg',
+                category: 'business'
+            }
+        };
+
+        // Data transformation function (same as in Audio.tsx)
+        function transformCampaignScriptsForBackend(campaignScripts) {
+            console.log('Transforming campaign scripts:', campaignScripts);
+            
+            // Handle the nested structure from Scripts page
+            let anglesData = [];
+            
+            if (campaignScripts?.campaign_scripts?.angles) {
+                anglesData = campaignScripts.campaign_scripts.angles;
+            } else if (campaignScripts?.angles) {
+                anglesData = campaignScripts.angles;
+            } else {
+                console.error('Invalid campaign scripts structure:', campaignScripts);
+                return { selected_angle: {}, scripts: [] };
+            }
+            
+            // Extract scripts from the nested structure and flatten them
+            const flattenedScripts = [];
+            let selectedAngle = {};
+            
+            anglesData.forEach((angle) => {
+                // Use the first angle as the selected angle
+                if (Object.keys(selectedAngle).length === 0 && angle.selected_angle) {
+                    selectedAngle = angle.selected_angle;
+                }
+                
+                angle.hooks?.forEach((hook) => {
+                    hook.scripts?.forEach((script) => {
+                        const transformedScript = {
+                            script_id: script.id || script.script_id || `script_${Date.now()}_${Math.random()}`,
+                            hook: hook.selected_hook?.hook_text || hook.hook_text || '',
+                            body: script.content || script.body || '',
+                            selected: true // All scripts passed to this page are considered selected
+                        };
+                        flattenedScripts.push(transformedScript);
+                    });
+                });
+            });
+            
+            const transformed = {
+                selected_angle: selectedAngle,
+                scripts: flattenedScripts
+            };
+            
+            console.log('Transformed structure:', transformed);
+            return transformed;
+        }
+
+        function testDataTransformation() {
+            // Show original data
+            document.getElementById('originalData').textContent = JSON.stringify(mockVoiceActorData, null, 2);
+            
+            // Transform data
+            const transformedScripts = transformCampaignScriptsForBackend(mockVoiceActorData.campaignScripts);
+            document.getElementById('transformedData').textContent = JSON.stringify(transformedScripts, null, 2);
+            
+            // Validate transformation
+            const hasScripts = transformedScripts.scripts && transformedScripts.scripts.length > 0;
+            const hasAngle = transformedScripts.selected_angle && Object.keys(transformedScripts.selected_angle).length > 0;
+            
+            console.log('Transformation validation:');
+            console.log('- Has scripts:', hasScripts, '(count:', transformedScripts.scripts?.length || 0, ')');
+            console.log('- Has selected angle:', hasAngle);
+            console.log('- Structure valid:', hasScripts && hasAngle);
+        }
+
+        async function testRealAudioCall() {
+            try {
+                // Transform the data first
+                const transformedScripts = transformCampaignScriptsForBackend(mockVoiceActorData.campaignScripts);
+                
+                if (!transformedScripts.scripts || transformedScripts.scripts.length === 0) {
+                    throw new Error('No scripts provided after transformation');
+                }
+                
+                const requestPayload = {
+                    thread_id: mockVoiceActorData.threadId,
+                    voice_actor_selection: {
+                        selected_voice: mockVoiceActorData.selectedVoice,
+                        selected_actor: mockVoiceActorData.selectedActor
+                    },
+                    campaign_scripts: transformedScripts
+                };
+
+                console.log('Making API call with payload:', requestPayload);
+
+                const response = await fetch('http://localhost:8000/video-ads/audio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dev-token'
+                    },
+                    body: JSON.stringify(requestPayload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                document.getElementById('apiResponse').innerHTML = 
+                    '<span class="success">✅ API call successful!</span><br><br>' + 
+                    JSON.stringify(result, null, 2);
+
+                console.log('Audio generation completed:', result);
+
+            } catch (error) {
+                console.error('Audio generation error:', error);
+                document.getElementById('apiResponse').innerHTML = 
+                    '<span class="error">❌ API call failed!</span><br><br>' + 
+                    'Error: ' + error.message;
+            }
+        }
+
+        // Auto-run transformation test on page load
+        window.addEventListener('load', () => {
+            setTimeout(testDataTransformation, 500);
+        });
+    </script>
+</body>
+</html>

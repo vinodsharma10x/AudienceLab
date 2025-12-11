@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Documentation
+*.md
+docs/
+
+# Generated files (we'll create fresh ones)
+generated_audio/*
+generated_videos/*
+!generated_audio/.gitkeep
+!generated_videos/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Development files
+docker-compose.dev.yml
+Dockerfile.dev
+test_*.py
+tests/

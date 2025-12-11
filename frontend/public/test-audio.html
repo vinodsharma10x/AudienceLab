@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Audio Page - Sucana v4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1976d2;
+            text-align: center;
+        }
+        .button {
+            background: #1976d2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            display: block;
+            width: 100%;
+        }
+        .button:hover {
+            background: #1565c0;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+        }
+        .success {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Audio Generation Test - Sucana v4</h1>
+        
+        <p>This page allows you to test the audio generation functionality without going through the full workflow.</p>
+        
+        <button class="button" onclick="testAudioPage()">
+            🎯 Test Audio Page (Frontend + Backend)
+        </button>
+        
+        <button class="button" onclick="testBackendOnly()">
+            🔧 Test Backend Only
+        </button>
+        
+        <button class="button" onclick="openAudioPage()">
+            🎵 Go to Audio Page Directly
+        </button>
+        
+        <div id="status" class="status" style="display: none;">
+            <strong>Status:</strong> <span id="statusText">Ready</span>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            
+            statusDiv.style.display = 'block';
+            statusText.textContent = message;
+            
+            statusDiv.className = 'status';
+            if (type === 'success') statusDiv.classList.add('success');
+            if (type === 'error') statusDiv.classList.add('error');
+        }
+
+        function testAudioPage() {
+            showStatus('Setting up test data and navigating to Audio page...');
+            
+            // Test data simulating the flow from voice-actor page
+            const testData = {
+                threadId: 'test-thread-' + Date.now(),
+                campaignScripts: {
+                    selected_angle: {
+                        id: 'angle-1',
+                        angle: 1,
+                        category: 'Problem Solution',
+                        concept: 'Identifies a common problem and presents the product as the solution',
+                        type: 'positive'
+                    },
+                    scripts: [
+                        {
+                            script_id: 'script-1',
+                            hook: 'Are you tired of struggling with complex project management tools that slow you down instead of helping you?',
+                            body: 'Introducing TaskFlow - the intuitive project management solution that gets your team organized in minutes, not hours. With drag-and-drop simplicity and real-time collaboration, you can finally focus on what matters: getting things done.',
+                            selected: true
+                        },
+                        {
+                            script_id: 'script-2', 
+                            hook: 'Stop wasting hours on project management overhead!',
+                            body: 'TaskFlow eliminates the complexity with smart automation that handles the busy work for you. Your team stays in sync, deadlines are met, and productivity soars. Join thousands of teams who have already made the switch.',
+                            selected: true
+                        }
+                    ]
+                },
+                selectedVoice: {
+                    voice_id: 'EXAVITQu4vr4xnSDxMaL',
+                    name: 'Bella',
+                    description: 'A young American woman with a clear, confident voice',
+                    category: 'conversational',
+                    labels: ['american', 'female', 'young'],
+                    gender: 'female',
+                    age: 'young adult',
+                    accent: 'american',
+                    use_case: 'conversational'
+                },
+                selectedActor: {
+                    filename: 'actor-001.jpg',
+                    name: 'Sarah Johnson',
+                    description: 'Professional young woman in business attire',
+                    category: 'business'
+                }
+            };
+
+            // Store test data in localStorage for Audio page
+            localStorage.setItem('videoAdsState', JSON.stringify({
+                step: 'audio',
+                data: testData
+            }));
+
+            showStatus('Test data set up! Navigating to Audio page...', 'success');
+            
+            // Navigate to audio page
+            setTimeout(() => {
+                window.location.href = '/video-ads/audio';
+            }, 1000);
+        }
+
+        async function testBackendOnly() {
+            showStatus('Testing backend audio generation endpoint...');
+            
+            const testPayload = {
+                thread_id: 'test-thread-' + Date.now(),
+                voice_actor_selection: {
+                    selected_voice: {
+                        voice_id: 'EXAVITQu4vr4xnSDxMaL',
+                        name: 'Bella',
+                        description: 'A young American woman with a clear, confident voice'
+                    },
+                    selected_actor: {
+                        name: 'Sarah Johnson',
+                        description: 'Professional young woman in business attire'
+                    }
+                },
+                campaign_scripts: {
+                    scripts: [
+                        {
+                            script_id: 'test-script',
+                            hook: 'Quick test hook for audio generation',
+                            body: 'This is a quick test script to verify our audio generation works correctly.',
+                            selected: true
+                        }
+                    ]
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/video-ads/audio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dev-token'
+                    },
+                    body: JSON.stringify(testPayload)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showStatus(`✅ Backend test successful! Generated ${result.total_audios_generated} audio files.`, 'success');
+                } else {
+                    const error = await response.json();
+                    showStatus(`❌ Backend test failed: ${error.detail}`, 'error');
+                }
+            } catch (err) {
+                showStatus(`❌ Backend test failed: ${err.message}`, 'error');
+            }
+        }
+
+        function openAudioPage() {
+            showStatus('Opening Audio page directly (no test data)...');
+            window.location.href = '/video-ads/audio';
+        }
+    </script>
+</body>
+</html>

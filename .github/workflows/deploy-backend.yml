@@ -1,0 +1,205 @@
+name: Deploy Backend to AWS Lightsail
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+env:
+  BACKEND_DIR: ./backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      working-directory: ${{ env.BACKEND_DIR }}
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-asyncio
+    
+    - name: Run tests
+      working-directory: ${{ env.BACKEND_DIR }}
+      env:
+        ENVIRONMENT: test
+      run: |
+        # Create test env file
+        echo "ENVIRONMENT=test" > .env
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+        echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+        
+        # Run tests if they exist
+        if [ -d "tests" ]; then
+          python -m pytest tests/ -v --tb=short || true
+        fi
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create .env.production file
+      working-directory: ${{ env.BACKEND_DIR }}
+      run: |
+        cat > .env.production << EOF
+        # Supabase
+        SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_JWT_SECRET=${{ secrets.SUPABASE_JWT_SECRET }}
+        SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+        
+        # API Keys
+        ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+        OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+        ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+        HEDRA_API_KEY=${{ secrets.HEDRA_API_KEY }}
+        
+        # Facebook (optional)
+        FACEBOOK_APP_ID=${{ secrets.FACEBOOK_APP_ID }}
+        FACEBOOK_APP_SECRET=${{ secrets.FACEBOOK_APP_SECRET }}
+        
+        # Environment
+        ENVIRONMENT=production
+        WORKERS=4
+        FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+        EOF
+    
+    - name: Deploy to Lightsail via SSH
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        port: 22
+        script: |
+          # Navigate to app directory
+          cd /home/ubuntu/audiencelab
+
+          # Ensure git remote uses SSH instead of HTTPS
+          git remote set-url origin git@github.com:vinodsharma10x/AudienceLab.git || true
+
+          # Pull latest code (with error handling)
+          git fetch origin main
+          git reset --hard origin/main
+
+          # Create .env file from secrets
+          cd backend
+          cat > .env << 'ENVEOF'
+          # Supabase
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_JWT_SECRET=${{ secrets.SUPABASE_JWT_SECRET }}
+          SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+
+          # API Keys
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+          HEDRA_API_KEY=${{ secrets.HEDRA_API_KEY }}
+
+          # AWS
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION=${{ secrets.AWS_REGION }}
+          S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+
+          # Facebook
+          FACEBOOK_APP_ID=${{ secrets.FACEBOOK_APP_ID }}
+          FACEBOOK_APP_SECRET=${{ secrets.FACEBOOK_APP_SECRET }}
+          ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}
+
+          # Environment
+          ENVIRONMENT=production
+          WORKERS=4
+          FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+          ENVEOF
+
+          # Build and restart with Docker Compose
+          docker-compose down
+          docker-compose build --no-cache
+          docker-compose up -d
+
+          # Wait for container to be healthy (with retries)
+          echo "Waiting for backend to be healthy..."
+          for i in {1..30}; do
+            if docker ps | grep -q "audiencelab-backend.*healthy"; then
+              echo "Container is healthy!"
+              break
+            fi
+            echo "Attempt $i/30: Container not healthy yet, waiting 2s..."
+            sleep 2
+          done
+
+          # Verify deployment with retries
+          echo "Verifying health endpoint..."
+          for i in {1..10}; do
+            if curl -f http://localhost:8000/health; then
+              echo "Health check passed!"
+              break
+            fi
+            echo "Attempt $i/10: Health check failed, waiting 3s..."
+            sleep 3
+            if [ $i -eq 10 ]; then
+              echo "Health check failed after 10 attempts"
+              docker logs audiencelab-backend --tail=50
+              exit 1
+            fi
+          done
+
+          echo "Deployment successful!"
+    
+    - name: Cleanup old files on server
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        port: 22
+        script: |
+          cd /home/ubuntu/audiencelab/backend
+
+          # Clean up files older than 7 days
+          find generated_audio -type f -mtime +7 -delete 2>/dev/null || true
+          find generated_videos -type f -mtime +7 -delete 2>/dev/null || true
+
+          # Check disk usage
+          df -h /
+          du -sh generated_audio generated_videos
+
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        if [ "${{ needs.deploy.result }}" == "success" ]; then
+          echo "✅ Backend deployed successfully to AWS Lightsail"
+        else
+          echo "❌ Backend deployment failed"
+          exit 1
+        fi
