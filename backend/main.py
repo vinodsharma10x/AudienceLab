@@ -15,14 +15,7 @@ from logging_service import logger
 # Load environment variables
 load_dotenv()
 
-# Import scheduler service (will auto-initialize)
-try:
-    from scheduler_service import get_scheduler
-    scheduler = get_scheduler()
-    logger.info("scheduler.initialized", "Background scheduler initialized")
-except Exception as e:
-    logger.warning("scheduler.init_failed", f"Scheduler not initialized: {e}", error=str(e))
-    scheduler = None
+# Scheduler removed (was for Facebook sync)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -116,8 +109,7 @@ async def startup_event():
         "server.startup",
         "FastAPI server started",
         environment=os.getenv("ENVIRONMENT", "development"),
-        supabase_connected=supabase is not None,
-        scheduler_enabled=scheduler is not None
+        supabase_connected=supabase is not None
     )
 
 # Shutdown event
@@ -252,14 +244,6 @@ app.include_router(video_ads_v3_router)
 # V4 routes for new workflow experimentation
 from video_ads_v4_routes import router as video_ads_v4_router
 app.include_router(video_ads_v4_router)
-
-# Facebook Marketing API routes
-from facebook_routes import router as facebook_router
-app.include_router(facebook_router)
-
-# Facebook Campaign Creation routes
-from facebook_campaign_routes import router as facebook_campaign_router
-app.include_router(facebook_campaign_router)
 
 # Run the server
 if __name__ == "__main__":

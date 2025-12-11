@@ -17,7 +17,17 @@ from auth import verify_token
 from video_ads_v3_database_service import v3_db_service
 from claude_service import ClaudeService
 from logging_service import logger
-from facebook_targeting_mapper import map_avatar_to_facebook_targeting
+# Facebook targeting mapper removed - stub function for compatibility
+def map_avatar_to_facebook_targeting(avatar_data: dict) -> dict:
+    """Stub function - Facebook integration removed"""
+    return {
+        "locations": avatar_data.get("locations", ["United States"]),
+        "age_min": avatar_data.get("age_min", 25),
+        "age_max": avatar_data.get("age_max", 55),
+        "gender": avatar_data.get("gender", "all"),
+        "interests": avatar_data.get("interests", []),
+        "job_titles": avatar_data.get("job_titles", []),
+    }
 
 # Import models (we can create V4 specific models later if needed)
 from video_ads_v2_models import VideoAdsProductInfoV2, URLParseV2Response
